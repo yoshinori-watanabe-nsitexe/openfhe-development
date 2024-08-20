@@ -454,7 +454,7 @@ if (WITH_OPENMP)
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     endif()
 else()  # WITH_OPENMP == OFF
-    find_package (Threads REQUIRED)
+#    find_package (Threads REQUIRED)
     # Disable unknown #pragma omp warning
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
@@ -464,11 +464,11 @@ endif()
 # Pthreads logic (only for Google benchmark)
 #--------------------------------------------------------------------
 # In order to have the Threads_FOUND on some Linux and macOS systems
-set(CMAKE_THREAD_LIBS_INIT "-lpthread")
-set(CMAKE_HAVE_THREADS_LIBRARY 1)
-set(CMAKE_USE_WIN32_THREADS_INIT 0)
-set(CMAKE_USE_PTHREADS_INIT 1)
-set(THREADS_PREFER_PTHREAD_FLAG ON)
+#set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+#set(CMAKE_HAVE_THREADS_LIBRARY 1)
+#set(CMAKE_USE_WIN32_THREADS_INIT 0)
+#set(CMAKE_USE_PTHREADS_INIT 1)
+#set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 #--------------------------------------------------------------------
 # Submodule Update logic

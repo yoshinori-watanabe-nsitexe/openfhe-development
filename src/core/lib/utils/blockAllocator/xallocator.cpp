@@ -44,7 +44,7 @@
 #include "utils/blockAllocator/xallocator.h"
 #include "utils/exception.h"
 
-static std::mutex xalloc_mutex;
+///static std::mutex xalloc_mutex;
 static bool _xallocInitialized = false;
 static std::map<size_t, Allocator*> _allocators;
 
@@ -265,7 +265,7 @@ void xalloc_init() {
 /// ~XallocInitDestroy destructor calls this function automatically.
 void xalloc_destroy() {
     lock_get();
-    std::unique_lock<std::mutex> lock(xalloc_mutex);
+    //std::unique_lock<std::mutex> lock(xalloc_mutex);
     {
         for (auto& [k, a] : _allocators) {
 #ifdef STATIC_POOLS
@@ -302,7 +302,7 @@ void* xmalloc(size_t size) {
     Allocator* allocator;
     void* blockMemoryPtr;
     lock_get();
-    std::unique_lock<std::mutex> lock(xalloc_mutex);
+//    std::unique_lock<std::mutex> lock(xalloc_mutex);
     {
         // Allocate a raw memory block
         allocator      = xallocator_get_allocator(size);
@@ -328,7 +328,7 @@ void xfree(void* ptr) {
     void* blockPtr = get_block_ptr(ptr);
 
     lock_get();
-    std::unique_lock<std::mutex> lock(xalloc_mutex);
+    //std::unique_lock<std::mutex> lock(xalloc_mutex);
     {
         // Deallocate the block
         allocator->Deallocate(blockPtr);
@@ -370,7 +370,7 @@ void* xrealloc(void* oldMem, size_t size) {
 /// Output xallocator usage statistics
 void xalloc_stats() {
     lock_get();
-    std::unique_lock<std::mutex> lock(xalloc_mutex);
+//    std::unique_lock<std::mutex> lock(xalloc_mutex);
     {
         std::cout << "\n***********************";
         if (!_allocators.empty()) {

@@ -39,7 +39,7 @@
 #include "utils/get-call-stack.h"
 #include <exception>
 #include <iostream>
-#include <mutex>
+//#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -53,7 +53,7 @@ namespace lbcrypto {
 // regions (thank you stack overflow)
 class ThreadException {
     std::exception_ptr Ptr;
-    std::mutex Lock;
+//    std::mutex Lock;
 
 public:
     ThreadException() : Ptr(nullptr) {}
@@ -63,7 +63,7 @@ public:
             std::rethrow_exception(this->Ptr);
     }
     void CaptureException() {
-        std::unique_lock<std::mutex> guard(this->Lock);
+  //      std::unique_lock<std::mutex> guard(this->Lock);
         this->Ptr = std::current_exception();
     }
 
