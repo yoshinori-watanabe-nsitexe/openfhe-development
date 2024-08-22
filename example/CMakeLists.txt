@@ -20,6 +20,7 @@ project(demo CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(OpenFHE_DIR ../build)
 
+
 find_package(OpenFHE CONFIG REQUIRED)
 if (OpenFHE_FOUND)
     message(STATUS "FOUND PACKAGE OpenFHE")
@@ -32,7 +33,9 @@ else()
     message(FATAL_ERROR "PACKAGE OpenFHE NOT FOUND")
 endif ()
 
-set( CMAKE_CXX_FLAGS ${OpenFHE_CXX_FLAGS} )
+set( CMAKE_CXX_FLAGS "${OpenFHE_CXX_FLAGS} ${CMAKE_CXX_FLAGS}" )
+set( CMAKE_CXX_FLAGS "-mcmodel=medany -static -nostdlib -nostartfiles -fno-common -fno-builtin-printf -fno-builtin-strcmp ${VOPT}")
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=unused-but-set-variable" )
 
 #include_directories( ${OPENMP_INCLUDES} )
 include_directories( ${OpenFHE_INCLUDE} )
@@ -44,6 +47,9 @@ include_directories( ${OpenFHE_INCLUDE}/binfhe )
 
 link_directories( ${OpenFHE_LIBDIR} )
 #link_directories( ${OPENMP_LIBRARIES} )
+
+set (OpenFHE_EXE_LINKER_FLAGS "${OpenFHE_EXE_LINKER_FLAGS} -T test.ld")
+
 if(BUILD_STATIC)
     set( CMAKE_EXE_LINKER_FLAGS "${OpenFHE_EXE_LINKER_FLAGS} -static")
     link_libraries( ${OpenFHE_STATIC_LIBRARIES} )
@@ -52,18 +58,19 @@ else()
     link_libraries( ${OpenFHE_SHARED_LIBRARIES} )
 endif()
 
-
 message(STATUS "OpenFHE_CXX_FLAGS: ${OpenFHE_CXX_FLAGS}")
 message(STATUS "OpenFHE_CXX_INCLUDES ${OpenFHE_CXX_INCLUDES}")
 message(STATUS "OpenFHE_CXX_DEFINES  ${OpenFHE_CXX_DEFINES}")
+message(STATUS "OpenFHE_EXE_LINKER_FLAGS  ${OpenFHE_EXE_LINKER_FLAGS}")
+
 message(STATUS "CXX_FLAGS: ${CXX_FLAGS}")
 message(STATUS "CXX_INCLUDES ${CXX_INCLUDES}")
 message(STATUS "CXX_DEFINES  ${CXX_DEFINES}")
-message(STATUS "OpenFHE_EXE_LINKER_FLAGS  ${OpenFHE_EXE_LINKER_FLAGS}")
+
 
 ### ADD YOUR EXECUTABLE(s) HERE
 ### add_executable( EXECUTABLE-NAME SOURCES )
 ###
 ### EXAMPLE:
-add_executable( test ../src/core/examples/sampling.cpp)
+add_executable( sample sampling.cpp common/crt.S common/syscalls.c )
 
